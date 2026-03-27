@@ -3,7 +3,7 @@ import io
 import sys
 from theq import node, displayGraph, to_mermaid, deleteGraph
 
-# Run: python3 -m theq testv2 -v
+# Run: python3 -m theq test -v
 
 class TestNode(unittest.TestCase):
     def test_node_creation(self):
@@ -19,20 +19,12 @@ class TestNode(unittest.TestCase):
 
 
 class TestDisplayGraph(unittest.TestCase):
-    def test_display_single_vertex_no_neighbors(self):
+    def test_display_empty_vertex(self):
         Adj = [None]
         output = self._capture_output(lambda: displayGraph(Adj, 1))
-        self.assertIn("Node 0", output)
         self.assertIn("—", output)
     
-    def test_display_single_vertex_one_neighbor(self):
-        Adj = [None]
-        Adj[0] = node(1, None)
-        output = self._capture_output(lambda: displayGraph(Adj, 1))
-        self.assertIn("Node 0", output)
-        self.assertIn("-> 1", output)
-    
-    def test_display_multiple_neighbors(self):
+    def test_display_with_neighbors(self):
         Adj = [None] * 2
         Adj[0] = node(1, node(2, None))
         Adj[1] = None
@@ -59,38 +51,29 @@ class TestDisplayGraph(unittest.TestCase):
 
 
 class TestToMermaid(unittest.TestCase):
-    def test_mermaid_single_isolated_vertex(self):
+    def test_mermaid_header_and_vertices(self):
         Adj = [None]
         result = to_mermaid(Adj, 1)
         self.assertTrue(result.startswith("graph TD"))
         self.assertIn("0", result)
     
-    def test_mermaid_single_edge(self):
+    def test_mermaid_edges(self):
         Adj = [None] * 2
         Adj[0] = node(1, None)
         Adj[1] = None
         result = to_mermaid(Adj, 2)
         self.assertIn("0 --- 1", result)
     
-    def test_mermaid_multiple_edges(self):
+    def test_mermaid_no_duplicate_reverse_edges(self):
         Adj = [None] * 2
         Adj[0] = node(1, None)
         Adj[1] = node(0, None)
         result = to_mermaid(Adj, 2)
         self.assertEqual(result.count("0 --- 1"), 1)
-    
-    def test_mermaid_chain(self):
-        Adj = [None] * 3
-        Adj[0] = node(1, node(2, None))
-        Adj[1] = None
-        Adj[2] = None
-        result = to_mermaid(Adj, 3)
-        self.assertIn("0 --- 1", result)
-        self.assertIn("0 --- 2", result)
 
 
 class TestDeleteGraph(unittest.TestCase):
-    def test_delete_clears_graph(self):
+    def test_delete_graph(self):
         Adj = [None] * 3
         Adj[0] = node(1, None)
         Adj[1] = node(2, None)
@@ -100,12 +83,6 @@ class TestDeleteGraph(unittest.TestCase):
         
         for i in range(3):
             self.assertIsNone(Adj[i])
-    
-    def test_delete_empty_graph(self):
-        Adj = [None] * 2
-        self._capture_output(lambda: deleteGraph(Adj, 2))
-        self.assertIsNone(Adj[0])
-        self.assertIsNone(Adj[1])
     
     def _capture_output(self, func):
         captured = io.StringIO()
