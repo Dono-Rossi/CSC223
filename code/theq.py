@@ -20,7 +20,6 @@ def createGraph(Adj, nodeNum):
             last = nodei
 
 
-
 def displayGraph(Adj, nodeNum):
     """Prints the graph structure to the console (Replacement for maxh __repr__)."""
     print("\n The Graph is: ")
@@ -58,28 +57,23 @@ def deleteGraph(Adj, nodeNum):
     print("\n Graph deleted successfully.")
 
 
+if __name__ == "__main__":
+    Adj = []
+    for i in range(10): 
+        Adj.append(None)
 
+    nodeNum = int(input("\n Enter the number of nodes in G: "))
 
-Adj = []
-for i in range(10): 
-    Adj.append(None)
+    for i in range(nodeNum):
+        Adj[i] = None
 
-nodeNum = int(input("\n Enter the number of nodes in G: "))
-
-for i in range(nodeNum):
-    Adj[i] = None
-
-
-createGraph(Adj, nodeNum)
-
-
-displayGraph(Adj, nodeNum)
-
-print("\n--- Mermaid Diagram (Copy into Mermaid Live Editor) ---")
-print(to_mermaid(Adj, nodeNum))
-
-
-choice = input("\nDo you want to delete the graph? (y/n): ")
-if choice.lower() == 'y':
-    deleteGraph(Adj, nodeNum)
+    createGraph(Adj, nodeNum)
     displayGraph(Adj, nodeNum)
+
+    print("\n--- Mermaid Diagram (Copy into Mermaid Live Editor) ---")
+    print(to_mermaid(Adj, nodeNum))
+
+    choice = input("\nDo you want to delete the graph? (y/n): ")
+    if choice.lower() == 'y':
+        deleteGraph(Adj, nodeNum)
+        displayGraph(Adj, nodeNum)

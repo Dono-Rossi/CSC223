@@ -3,6 +3,7 @@ import io
 import sys
 from theq import node, displayGraph, to_mermaid, deleteGraph
 
+# Run: python3 -m theq testv2 -v
 
 class TestNode(unittest.TestCase):
     def test_node_creation(self):
